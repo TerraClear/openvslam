@@ -84,7 +84,9 @@ private:
     const unsigned int num_ba_iters_;
     //! initial scaling factor (only for monocular initializer)
     const float scaling_factor_;
-
+    //! Initial pose 
+    std::vector<double> init_pose_ ;
+    
     //-----------------------------------------
     // for monocular camera model
 

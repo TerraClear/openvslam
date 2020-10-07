@@ -22,7 +22,8 @@ initializer::initializer(const camera::setup_type_t setup_type,
       parallax_deg_thr_(yaml_node["Initializer.parallax_deg_threshold"].as<float>(1.0)),
       reproj_err_thr_(yaml_node["Initializer.reprojection_error_threshold"].as<float>(4.0)),
       num_ba_iters_(yaml_node["Initializer.num_ba_iterations"].as<unsigned int>(20)),
-      scaling_factor_(yaml_node["Initializer.scaling_factor"].as<float>(1.0)) {
+      init_pose_(yaml_node["Initial pose"].as<std::vector<double>>()),
+      scaling_factor_(yaml_node["Initializer.scaling_factor"].as<float>(1.0)){
     spdlog::debug("CONSTRUCT: module::initializer");
 }
 
@@ -172,7 +173,11 @@ bool initializer::create_map_for_monocular(data::frame& curr_frm) {
         }
 
         // set the camera poses
-        init_frm_.set_cam_pose(Mat44_t::Identity());
+        Mat44_t init_pose;
+        for (size_t i=0; i<4; ++i)
+            for (size_t j=0; j<4; ++j)
+                init_pose(i,j)=this->init_pose_[i*4+j];
+        init_frm_.set_cam_pose(init_pose);
         Mat44_t cam_pose_cw = Mat44_t::Identity();
         cam_pose_cw.block<3, 3>(0, 0) = initializer_->get_rotation_ref_to_cur();
         cam_pose_cw.block<3, 1>(0, 3) = initializer_->get_translation_ref_to_cur();
