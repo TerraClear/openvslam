@@ -9,6 +9,7 @@ cmake-build-release/
 
 # Prerequisites
 *.d
+.*
 
 # Compiled Object files
 *.slo
