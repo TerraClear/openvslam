@@ -22,9 +22,10 @@ initializer::initializer(const camera::setup_type_t setup_type,
       parallax_deg_thr_(yaml_node["Initializer.parallax_deg_threshold"].as<float>(1.0)),
       reproj_err_thr_(yaml_node["Initializer.reprojection_error_threshold"].as<float>(4.0)),
       num_ba_iters_(yaml_node["Initializer.num_ba_iterations"].as<unsigned int>(20)),
-      init_pose_(yaml_node["Initial pose"].as<std::vector<double>>()),
+      init_pose_(yaml_node["Initializer.pose"].as<std::vector<double>>(std::vector<double> {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1})),
       scaling_factor_(yaml_node["Initializer.scaling_factor"].as<float>(1.0)){
     spdlog::debug("CONSTRUCT: module::initializer");
+    assert(init_pose_.size()==16);
 }
 
 initializer::~initializer() {
