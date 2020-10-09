@@ -174,11 +174,8 @@ bool initializer::create_map_for_monocular(data::frame& curr_frm) {
         }
 
         // set the camera poses
-        Mat44_t init_pose;
-        for (size_t i=0; i<4; ++i)
-            for (size_t j=0; j<4; ++j)
-                init_pose(i,j)=this->init_pose_[i*4+j];
-        init_frm_.set_cam_pose(init_pose);
+        Eigen::Map<Mat44_t> init_pose(init_pose_.data(),4,4);
+        init_frm_.set_cam_pose(init_pose.transpose());
         Mat44_t cam_pose_cw = Mat44_t::Identity();
         cam_pose_cw.block<3, 3>(0, 0) = initializer_->get_rotation_ref_to_cur();
         cam_pose_cw.block<3, 1>(0, 3) = initializer_->get_translation_ref_to_cur();
