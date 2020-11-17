@@ -109,6 +109,11 @@ public:
     void update_pose_params();
 
     /**
+     * Update covariance matrix for the current pose
+     */
+    void update_covariance_matrix(const Mat66_t &covariance_matrix);
+    
+    /**
      * Get camera center
      * @return
      */
@@ -224,6 +229,9 @@ public:
     //! camera pose: world -> camera
     bool cam_pose_cw_is_valid_ = false;
     Mat44_t cam_pose_cw_;
+
+    //! camera pose covariance:
+    Mat66_t covariance_matrix_;
 
     //! reference keyframe for tracking
     keyframe* ref_keyfrm_ = nullptr;

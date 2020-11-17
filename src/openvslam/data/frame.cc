@@ -141,6 +141,11 @@ void frame::update_pose_params() {
     cam_center_ = -rot_cw_.transpose() * trans_cw_;
 }
 
+void frame::update_covariance_matrix(const Mat66_t &covariance_matrix)
+{
+    covariance_matrix_=covariance_matrix;
+}
+
 Vec3_t frame::get_cam_center() const {
     return cam_center_;
 }

@@ -113,6 +113,7 @@ public:
     //! (Note: RGB and Depth images must be aligned)
     Mat44_t feed_RGBD_frame(const cv::Mat& rgb_img, const cv::Mat& depthmap, const double timestamp, const cv::Mat& mask = cv::Mat{});
 
+    Mat66_t get_frm_covariance_matrix();
     //-----------------------------------------
     // management for pause
 

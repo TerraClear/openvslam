@@ -277,6 +277,11 @@ Mat44_t system::feed_RGBD_frame(const cv::Mat& rgb_img, const cv::Mat& depthmap,
     return cam_pose_cw;
 }
 
+Mat66_t system::get_frm_covariance_matrix()
+{
+    return tracker_->curr_frm_.covariance_matrix_;
+}
+
 void system::pause_tracker() {
     tracker_->request_pause();
 }
