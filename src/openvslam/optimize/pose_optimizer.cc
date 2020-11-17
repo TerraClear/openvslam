@@ -145,7 +145,7 @@ unsigned int pose_optimizer::optimize(data::frame& frm) const {
     frm.set_cam_pose(frm_vtx->estimate());
     ::g2o::SparseBlockMatrix<Eigen::MatrixXd> covariance;
     optimizer.computeMarginals(covariance, frm_vtx);
-    Mat66_t covariance_matrix=covariance.block(0,0)->eval();
+    Mat66_t covariance_matrix=covariance.block(0,0)->eval().inverse();
     frm.update_covariance_matrix(covariance_matrix);
     return num_init_obs - num_bad_obs;
 }
