@@ -3,6 +3,8 @@
 #include "openvslam/optimize/pose_optimizer.h"
 #include "openvslam/optimize/g2o/se3/pose_opt_edge_wrapper.h"
 #include "openvslam/util/converter.h"
+#include <g2o/core/optimization_algorithm_gauss_newton.h>
+#include <g2o/solvers/csparse/linear_solver_csparse.h>
 
 #include <vector>
 #include <mutex>
@@ -25,7 +27,7 @@ pose_optimizer::pose_optimizer(const unsigned int num_trials, const unsigned int
 unsigned int pose_optimizer::optimize(data::frame& frm) const {
     // 1. optimizerを構築
 
-    auto linear_solver = ::g2o::make_unique<::g2o::LinearSolverEigen<::g2o::BlockSolver_6_3::PoseMatrixType>>();
+    auto linear_solver = ::g2o::make_unique<::g2o::LinearSolverCSparse<::g2o::BlockSolver_6_3::PoseMatrixType>>();
     auto block_solver = ::g2o::make_unique<::g2o::BlockSolver_6_3>(std::move(linear_solver));
     auto algorithm = new ::g2o::OptimizationAlgorithmLevenberg(std::move(block_solver));
 
@@ -141,6 +143,8 @@ unsigned int pose_optimizer::optimize(data::frame& frm) const {
     // 5. 情報を更新
 
     frm.set_cam_pose(frm_vtx->estimate());
+    ::g2o::SparseBlockMatrix<Eigen::MatrixXd> covariance;
+    optimizer.computeMarginals(covariance, frm_vtx);
 
     return num_init_obs - num_bad_obs;
 }
